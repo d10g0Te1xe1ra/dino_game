@@ -248,6 +248,17 @@ function scorePoints() {
      */
     score += 1 
     points.innerText = score
+    if(score === 5){
+        gameVel = 1 
+        frame.classList.add("noon");
+    } else if(score === 10) {
+        gameVel = 1.25
+        frame.classList.add("afternoon");
+    } else if(score === 20) {
+        gameVel = 1.75
+        frame.classList.add("night");
+    }
+
     ground.style.animationDuration = (3 / gameVel)+"s";
 }
 
@@ -260,6 +271,9 @@ function dead() {
      * temos de atualizar a flag stopped com o 
      * booleano true.
      */
+    dino.classList.remove('dino-running')
+    dino.classList.add('dino-dead')
+    stopped = true
 }
 
 function gameOverFrame() {
@@ -280,6 +294,10 @@ function detectColision() {
              * Para tal, chama a funcao dead() e depois a gameOverFrame().
              * Nao te esquecas que tens de implementar a funcao dead().
              */
+            if(isCollision(dino, obstacles[i], 10, 30, 15, 20)){
+                dead() 
+                gameOverFrame()
+            }
         }
     }
 }
@@ -302,9 +320,10 @@ function isCollision(dino, obstacle, paddingTop, paddingRight,paddingBottom,padd
     var dinoRect = dino.getBoundingClientRect()
     var obstacleRect = obstacle.getBoundingClientRect()
     
-    return !((dinoRect.top + dinoRect.height - paddingBottom) < (obstacleRect.top)||
-    dinoRect.top + paddingTop > (obstacleRect.top + obstacleRect.height)||
-    (dinoRect.left + dinoRect.width - paddingRight) < obstacleRect.left)||
-    dinoRect.left + paddingLeft > (obstacleRect.left + obstacleRect.width);
+    return !(
+        ((dinoRect.top + dinoRect.height - paddingBottom) < (obstacleRect.top)) ||
+    (dinoRect.top + paddingTop > (obstacleRect.top + obstacleRect.height)) ||
+    ((dinoRect.left + dinoRect.width - paddingRight) < obstacleRect.left) ||
+    (dinoRect.left + paddingLeft > (obstacleRect.left + obstacleRect.width)));
 
 }
